@@ -103,17 +103,17 @@ test-coverage:
 	tox -e py36 --
 
 build:
-	docker build -t $(IMAGE_NAME) .
+	podman build -t $(IMAGE_NAME) .
 
 clean-db:
 	$(PREFIX) rm -rf $(TOPDIR)/pg_data
 	make compose-down
 
 start-db:
-	docker-compose up -d db
+	podman-compose up -d db
 
 compose-down:
-	docker-compose down
+	podman-compose down
 
 wait-db:
 	sleep 10
@@ -125,8 +125,8 @@ local-dev-up:
 	clear
 
 local-dev-down:
-	cd ../insights-ingress-go;docker-compose -f development/local-dev-start.yml down
-	docker-compose down
+	cd ../insights-ingress-go;podman-compose -f development/local-dev-start.yml down
+	podman-compose down
 	osascript -e 'quit app "iTerm"' | true
 
 local-upload-data:

@@ -31,6 +31,8 @@ from api.models import Report
 from api.serializers import ReportSerializer
 from config.settings.base import INSIGHTS_KAFKA_ADDRESS
 from config.settings.base import INSIGHTS_KAFKA_TOPIC
+from config.settings.base import INSIGHTS_KAFKA_USERNAME
+from config.settings.base import INSIGHTS_KAFKA_PASSWORD
 from processor.processor_utils import format_message
 from processor.processor_utils import PROCESSOR_INSTANCES
 from processor.processor_utils import stop_all_event_loops
@@ -84,6 +86,10 @@ def get_consumer():
             "group.id": "mkt-group",
             "queued.max.messages.kbytes": 1024,
             "enable.auto.commit": False,
+            "security_protocol": "SASL_SSL",
+            "sasl_mechanism": "PLAIN",
+            "sasl_plain_username": INSIGHTS_KAFKA_USERNAME,
+            "sasl_plain_password": INSIGHTS_KAFKA_PASSWORD
         },
         logger=LOG,
     )

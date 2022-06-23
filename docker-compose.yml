@@ -26,6 +26,7 @@ services:
     depends_on:
       - minio
     entrypoint: >
+      /usr/bin/echo "buckets_string_boo"
       /bin/sh -c "
       /usr/bin/mc config host add myminio http://minio:9001 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY;
       /usr/bin/mc mb myminio/marketplace;
@@ -45,5 +46,5 @@ services:
       ports:
           - '9090:9090'
       volumes:
-          - './scripts/config/prometheus.yml:/etc/prometheus/prometheus.yml'
+          - './scripts/config/prometheus.yml:/etc/prometheus/prometheus.yml:Z'
       image: prom/prometheus

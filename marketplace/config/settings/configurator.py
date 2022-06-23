@@ -19,8 +19,9 @@ Handler module for gathering configuration data.
 """
 from .env import ENVIRONMENT
 
+from app_common_python import isClowderEnabled
+CLOWDER_ENABLED = isClowderEnabled()
 
-CLOWDER_ENABLED = ENVIRONMENT.bool("CLOWDER_ENABLED", default=False)
 if CLOWDER_ENABLED:
     from app_common_python import LoadedConfig, KafkaTopics, ObjectBuckets
 
@@ -161,7 +162,17 @@ class EnvConfigurator(Configurator):
     def get_kafka_topic():
         """Obtain kafka topic."""
         return ENVIRONMENT.get_value("INSIGHTS_KAFKA_TOPIC", default="platform.upload.mkt")
-
+    ###################################### Regular Environment no clowder 
+    #@staticmethod
+    #def get_kafka_username():#Should I get out of a secret
+    #    """Obtain kafka username."""
+    #    secret = ENVIRONMENT.get_value("KAFKA_OPENSHIFT_SECRET") 
+    #    return secret.get_value("")            
+    #@staticmethod ###################################### Regular Environment no clowder
+    #def get_kafka_password():#Should I get out of a secret
+    #    """Obtain kafka password."""
+    #    return ENVIRONMENT.get_value("INSIGHTS_KAFKA_PASSWORD")
+    ######################################
     @staticmethod
     def get_cloudwatch_access_id():
         """Obtain cloudwatch access id."""
@@ -279,7 +290,17 @@ class ClowderConfigurator(Configurator):
     def get_kafka_topic():
         """Obtain kafka topic."""
         return KafkaTopics.get("platform.upload.mkt").name
-
+    ###################################### Clowder 
+    @staticmethod
+    def get_kafka_username():
+        """Obtain kafka username."""
+        return LoadedConfig.kafka.brokers[0].sasl.username
+        #return ENVIRONMENT.get_value("INSIGHTS_KAFKA_USERNAME")             
+    @staticmethod ###################################### Clowder
+    def get_kafka_password():
+        """Obtain kafka password."""
+        return LoadedConfig.kafka.brokers[0].sasl.password
+    #####################################
     @staticmethod
     def get_cloudwatch_access_id():
         """Obtain cloudwatch access id."""
